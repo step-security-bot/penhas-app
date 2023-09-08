@@ -13,14 +13,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-java@v1
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - uses: actions/setup-java@b6e674f4b717d7b0ae3baee0fbe79f498905dfde # v1.4.4
         with:
           java-version: "12.x"
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8 # v1.5.3
         with:
           channel: "stable"
-      - uses: stelynx/dart-full-coverage@v1.1.1
+      - uses: stelynx/dart-full-coverage@fc91fc4cf52e65867c0ad0e54390d0fd4e22f7d8 # v1.1.1
         with:
           package: egakcap
           ignore: "*_state.dart, do_not_import_me.dart"
@@ -29,4 +34,4 @@ jobs:
       - run: flutter build aot
       - run: flutter analyze
       - run: flutter test --timeout=1h --dart-define=isCI=true --coverage .
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4

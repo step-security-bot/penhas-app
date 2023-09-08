@@ -34,17 +34,22 @@ jobs:
     runs-on: macos-latest
     environment: ${{ inputs.environment }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
       - name: Checkout repository
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_14.2.app
 
       - name: Retrieve Flutter version from FVM config
-        uses: kuhnroyal/flutter-fvm-config-action@v1
+        uses: kuhnroyal/flutter-fvm-config-action@6ffa30473b346f7d7c63cf9e03e6a886f940a72b # v1.2.0
 
       - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa # v2.10.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
@@ -78,7 +83,7 @@ jobs:
           KEYCHAIN_PWD: ${{ secrets.KEYCHAIN_PWD }}
 
       - name: Run lane to distribute
-        uses: maierj/fastlane-action@v3.0.0
+        uses: maierj/fastlane-action@516faaa1c6c7b366ecd238b4e4608d286874dd94 # v3.0.0
         with:
           lane: ${{ vars.TARGET_LANE }}
           options: '{ "tester_email": "${{ secrets.TESTER_EMAIL }}" }'
